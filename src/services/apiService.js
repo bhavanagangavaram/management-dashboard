@@ -62,6 +62,12 @@ const apiService = {
    * @throws {Error} If the HTTP response is not OK.
    */
   async updateUser(id, data) {
+    // If id > 10, it's a locally created user.
+    // JSONPlaceholder will throw a 500 error for PUT on non-existent resources.
+    if (id > 10) {
+      return { id, ...data };
+    }
+
     const res = await fetch(`${API_BASE_URL}/users/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -82,6 +88,12 @@ const apiService = {
    * @throws {Error} If the HTTP response is not OK.
    */
   async deleteUser(id) {
+    // If id > 10, it's a locally created user.
+    // Prevent potentially failing DELETE requests to the mock server.
+    if (id > 10) {
+      return true;
+    }
+
     const res = await fetch(`${API_BASE_URL}/users/${id}`, {
       method: "DELETE",
     });

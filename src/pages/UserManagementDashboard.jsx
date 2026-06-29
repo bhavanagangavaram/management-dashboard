@@ -102,12 +102,12 @@ export default function UserManagementDashboard() {
           prev.map((u) =>
             u.id === formData.id
               ? {
-                  ...u,
-                  firstName: formData.firstName,
-                  lastName: formData.lastName,
-                  email: formData.email,
-                  department: formData.department,
-                }
+                ...u,
+                firstName: formData.firstName,
+                lastName: formData.lastName,
+                email: formData.email,
+                department: formData.department,
+              }
               : u
           )
         );
@@ -287,9 +287,9 @@ export default function UserManagementDashboard() {
         <div className="flex flex-col sm:flex-row gap-3 mb-5">
           {/* Global search input */}
           <div className="flex-1 relative">
-            <img 
-              src={isSearchFocused ? `${import.meta.env.BASE_URL}search-animated.png` : `${import.meta.env.BASE_URL}search.gif`} 
-              alt="search" 
+            <img
+              src={isSearchFocused ? `${import.meta.env.BASE_URL}search-animated.png` : `${import.meta.env.BASE_URL}search.gif`}
+              alt="search"
               className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 pointer-events-none"
             />
             <input
@@ -322,11 +322,10 @@ export default function UserManagementDashboard() {
           {/* Filter button with active count badge */}
           <button
             onClick={() => setShowFilters(true)}
-            className={`flex items-center gap-2 px-4 py-2.5 border rounded-xl text-sm font-medium transition-colors shadow-sm flex-shrink-0 ${
-              activeFilterCount > 0
+            className={`flex items-center gap-2 px-4 py-2.5 border rounded-xl text-sm font-medium transition-colors shadow-sm flex-shrink-0 ${activeFilterCount > 0
                 ? "bg-indigo-50 border-indigo-200 text-indigo-700"
                 : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
-            }`}
+              }`}
           >
             <span>⚙</span>
             Filters
@@ -399,9 +398,8 @@ export default function UserManagementDashboard() {
                             : "descending"
                           : "none"
                       }
-                      className={`text-left px-4 py-3.5 text-xs font-semibold text-slate-500 uppercase tracking-wider cursor-pointer hover:bg-slate-50 select-none whitespace-nowrap transition-colors ${
-                        field === "lastName" ? "hidden sm:table-cell" : ""
-                      }`}
+                      className={`text-left px-4 py-3.5 text-xs font-semibold text-slate-500 uppercase tracking-wider cursor-pointer hover:bg-slate-50 select-none whitespace-nowrap transition-colors ${field === "lastName" ? "hidden sm:table-cell" : ""
+                        }`}
                     >
                       {label}
                       <SortArrow field={field} sortConfig={sortConfig} />
@@ -437,9 +435,8 @@ export default function UserManagementDashboard() {
                   paginatedUsers.map((user, idx) => (
                     <tr
                       key={user.id}
-                      className={`border-b border-slate-100 hover:bg-indigo-50/40 transition-colors ${
-                        idx % 2 === 1 ? "bg-slate-50/40" : ""
-                      }`}
+                      className={`border-b border-slate-100 hover:bg-indigo-50/40 transition-colors ${idx % 2 === 1 ? "bg-slate-50/40" : ""
+                        }`}
                     >
                       {/* ID */}
                       <td className="px-4 py-3.5">
@@ -475,9 +472,8 @@ export default function UserManagementDashboard() {
                       {/* Department badge with stable colour */}
                       <td className="px-4 py-3.5">
                         <span
-                          className={`inline-flex px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap ${
-                            DEPT_COLORS[getColorIndex(user.department)]
-                          }`}
+                          className={`inline-flex px-2.5 py-1 rounded-full text-xs font-medium whitespace-nowrap ${DEPT_COLORS[getColorIndex(user.department)]
+                            }`}
                         >
                           {user.department}
                         </span>
