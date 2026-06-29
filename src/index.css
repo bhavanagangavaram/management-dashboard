@@ -1,0 +1,33 @@
+/* ============================================================
+ * index.css — Global styles & TailwindCSS directives
+ *
+ * This file imports Tailwind's base, component, and utility
+ * layers. Any custom global styles should be added below the
+ * directives.
+ * ============================================================ */
+
+/*
+ * Import Inter font from Google Fonts for a clean, modern feel.
+ * Falls back to the system sans-serif stack if unavailable.
+ * Note: @import must precede @tailwind directives per CSS spec.
+ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/*
+ * Skeleton loader animation — used by SkeletonRow component
+ * to show a pulsing placeholder while data loads.
+ */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
