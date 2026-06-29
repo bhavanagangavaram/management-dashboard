@@ -256,7 +256,7 @@ export default function UserManagementDashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3 min-w-0">
             {/* App icon */}
-            <img src="/dashboard-layout.png" alt="UM Logo" className="w-9 h-9 object-contain flex-shrink-0" />
+            <img src={`${import.meta.env.BASE_URL}dashboard-layout.png`} alt="UM Logo" className="w-9 h-9 object-contain flex-shrink-0" />
             <div className="min-w-0">
               <h1 className="text-lg font-bold text-slate-900 leading-none truncate">
                 User Management
@@ -288,7 +288,7 @@ export default function UserManagementDashboard() {
           {/* Global search input */}
           <div className="flex-1 relative">
             <img 
-              src={isSearchFocused ? "/search-animated.png" : "/search.gif"} 
+              src={isSearchFocused ? `${import.meta.env.BASE_URL}search-animated.png` : `${import.meta.env.BASE_URL}search.gif`} 
               alt="search" 
               className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 pointer-events-none"
             />
