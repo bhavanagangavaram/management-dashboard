@@ -33,13 +33,6 @@ import FilterModal from "../components/FilterModal";
 import UserFormModal from "../components/UserFormModal";
 import DeleteModal from "../components/DeleteModal";
 
-/**
- * Client-side ID counter for new users. We cannot rely on
- * JSONPlaceholder's response (always returns id: 11) because
- * adding multiple users would create duplicate keys.
- * Starting above 1000 avoids collisions with the 10 seed users.
- */
-let nextClientId = 1000;
 
 /**
  * UserManagementDashboard — the top-level page component.
@@ -66,6 +59,7 @@ export default function UserManagementDashboard() {
 
   // ── Search / filter / sort / pagination state ──────────────
   const [searchQuery, setSearchQuery] = useState("");
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [filters, setFilters] = useState({
     firstName: "",
     lastName: "",
@@ -124,11 +118,12 @@ export default function UserManagementDashboard() {
 
         /*
          * BUG FIX: JSONPlaceholder always returns { id: 11 }.
-         * Using a client-side counter avoids duplicate React keys
-         * and ensures each new user has a unique identifier.
+         * We find the highest existing ID and add 1 to ensure
+         * each new user has a unique, sequentially accurate identifier.
          */
+        const maxId = users.reduce((max, u) => Math.max(max, u.id), 0);
         const newUser = {
-          id: ++nextClientId,
+          id: maxId + 1,
           firstName: formData.firstName,
           lastName: formData.lastName,
           email: formData.email,
@@ -261,9 +256,7 @@ export default function UserManagementDashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3 min-w-0">
             {/* App icon */}
-            <div className="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center flex-shrink-0">
-              <span className="text-white text-sm font-bold">UM</span>
-            </div>
+            <img src="/dashboard-layout.png" alt="UM Logo" className="w-9 h-9 object-contain flex-shrink-0" />
             <div className="min-w-0">
               <h1 className="text-lg font-bold text-slate-900 leading-none truncate">
                 User Management
@@ -294,9 +287,11 @@ export default function UserManagementDashboard() {
         <div className="flex flex-col sm:flex-row gap-3 mb-5">
           {/* Global search input */}
           <div className="flex-1 relative">
-            <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm pointer-events-none">
-              🔍
-            </span>
+            <img 
+              src={isSearchFocused ? "/search-animated.png" : "/search.gif"} 
+              alt="search" 
+              className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 pointer-events-none"
+            />
             <input
               type="text"
               value={searchQuery}
@@ -304,6 +299,8 @@ export default function UserManagementDashboard() {
                 setSearchQuery(e.target.value);
                 setPage(1);
               }}
+              onFocus={() => setIsSearchFocused(true)}
+              onBlur={() => setIsSearchFocused(false)}
               placeholder="Search by name, email, department…"
               aria-label="Search users"
               className="w-full pl-9 pr-9 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm"
