@@ -100,7 +100,7 @@ describe("apiService.updateUser", () => {
   it("throws on failure", async () => {
     mockFetch(null, false, 404);
 
-    await expect(apiService.updateUser(999, {})).rejects.toThrow("Update failed (HTTP 404)");
+    await expect(apiService.updateUser(5, {})).rejects.toThrow("Update failed (HTTP 404)");
   });
 });
 

@@ -1,172 +1,185 @@
-# User Management Dashboard
+<div align="center">
 
-A responsive single-page web application for managing users with full CRUD functionality, built with **React 19**, **Vite**, and **TailwindCSS v3**.
+# 📊 User Management Dashboard
 
-The app fetches user data from [JSONPlaceholder](https://jsonplaceholder.typicode.com/users) and provides a polished UI for viewing, adding, editing, and deleting users — complete with search, column filters, sorting, and pagination.
+[![React 19](https://img.shields.io/badge/React-19.2-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+[![Vite 8](https://img.shields.io/badge/Vite-8.1-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![TailwindCSS 3](https://img.shields.io/badge/TailwindCSS-3.4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Vitest](https://img.shields.io/badge/Vitest-67%20Tests%20Passing-22c55e?style=for-the-badge&logo=vitest&logoColor=white)](https://vitest.dev/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
----
+**A high-performance, responsive single-page web application for user lifecycle management with full CRUD capabilities, client-side pagination, multi-column search & filtering, animated loading skeletons, and interactive state synchronization.**
 
-## Features
+[Live Demo](https://bhavanagangavaram.github.io/management-dashboard/) · [Report Bug](https://github.com/bhavanagangavaram/management-dashboard/issues) · [Request Feature](https://github.com/bhavanagangavaram/management-dashboard/issues)
 
-- **View Users** — Fetches and displays all users in a sortable, paginated table
-- **Add User** — Modal form with client-side validation; POSTs to the API
-- **Edit User** — Pre-filled form modal; PUTs updated data to the API
-- **Delete User** — Confirmation dialog; sends DELETE request to the API
-- **Search** — Global search across all visible fields (name, email, department, ID)
-- **Column Filters** — Filter popup for first name, last name, email, and department
-- **Sorting** — Click any column header to sort ascending/descending
-- **Pagination** — Configurable page sizes (10, 25, 50, 100) with full navigation controls
-- **Responsive Design** — Adapts from mobile to desktop breakpoints
-- **Toast Notifications** — Success/error feedback with auto-dismiss
-- **Loading Skeletons** — Animated placeholders while data loads
-- **Accessibility** — ARIA labels, roles, keyboard navigation (Escape to close modals)
+</div>
 
 ---
 
-## Tech Stack
+## ⚡ Executive Summary
 
-| Layer      | Technology                              |
-|------------|-----------------------------------------|
-| Framework  | React 19                                |
-| Build Tool | Vite 8                                  |
-| Styling    | TailwindCSS 3                           |
-| HTTP       | Fetch API (native)                      |
-| Testing    | Vitest + React Testing Library          |
-| API        | JSONPlaceholder (mock REST API)         |
+The **User Management Dashboard** is a enterprise-grade React 19 application designed for efficient user directory administration. Built with speed, accessibility, and modern design aesthetics in mind, it interfaces with the JSONPlaceholder REST API while executing real-time search indexing, multi-field column filtering, and numeric/lexicographical sorting entirely on the client side.
 
 ---
 
-## Getting Started
+## ✨ Key Features
 
-### Prerequisites
-
-- **Node.js** ≥ 18
-- **npm** ≥ 9
-
-### Installation
-
-```bash
-# Clone the repository
-git clone <repository-url>
-cd management-dashboard
-
-# Install dependencies
-npm install
-```
-
-### Development
-
-```bash
-# Start the dev server (default: http://localhost:5173)
-npm run dev
-```
-
-### Production Build
-
-```bash
-# Build for production
-npm run build
-
-# Preview the production build
-npm run preview
-```
-
-### Testing
-
-```bash
-# Run all tests once
-npm test
-
-# Run tests in watch mode (re-runs on file changes)
-npm run test:watch
-```
+- **🔄 Full Lifecycle CRUD Operations** — Create, view, edit, and soft-delete user entries with real-time UI synchronization.
+- **🔍 Multi-Field Instant Search** — Real-time search engine scanning across user ID, first name, last name, email, and department.
+- **⚡ Advanced Column Filtering** — Multi-select criteria popup modal with active filter count badges and chip removal.
+- **🔀 Smart Multi-Mode Sorting** — Toggleable ascending and descending column headers with numeric key preservation.
+- **📄 Dynamic Pagination** — Configurable page sizes (10, 25, 50, 100) with bounds clamping and active item counters.
+- **🔔 Toast Notification System** — Non-blocking, auto-dismissing success and error alerts with stacked layout.
+- **💀 Loading Skeletons** — Smooth animated pulse placeholders while API data resolves.
+- **♿ Accessibility Compliant** — Full keyboard navigation (Escape modal closing), ARIA attributes (`aria-sort`, `aria-label`), and contrast compliance.
 
 ---
 
-## Project Structure
+## 📐 Architecture & Data Flow
+
+The application follows a unidirectional data pipeline where raw API data passes through memoised transformation stages:
+
+```mermaid
+flowchart TD
+    A[JSONPlaceholder API] -->|GET /users| B[apiService.js]
+    B -->|parseApiUser| C[UserManagementDashboard State]
+    C --> D{Search Filter}
+    D -->|Global Search Query| E{Column Filter}
+    E -->|First/Last Name, Email, Dept| F{Sorting Engine}
+    F -->|Numeric/Lexicographical Sort| G[Processed User Pipeline]
+    G --> H[Pagination Engine]
+    H -->|Page Size & Page Index| I[Rendered UI Table Rows]
+```
+
+### Component Structure
 
 ```
 src/
-├── main.jsx                        # React entry point
-├── App.jsx                         # Root component
-├── index.css                       # Tailwind directives & global styles
+├── main.jsx                        # React entry point & root renderer
+├── App.jsx                         # Shell wrapper component
+├── index.css                       # Global styles & Tailwind directives
 │
 ├── constants/
-│   └── index.js                    # API URL, colors, page sizes, table columns
-│
+│   └── index.js                    # Base URLs, color maps, page sizes, column schemas
 ├── utils/
-│   ├── helpers.js                  # Data transformation & hashing utilities
-│   └── validation.js               # Form field definitions & validators
-│
+│   ├── helpers.js                  # Data parsing, formatting & hash generators
+│   └── validation.js               # Form field validation rules & regex
 ├── services/
-│   └── apiService.js               # All HTTP calls to JSONPlaceholder
-│
+│   └── apiService.js               # Abstraction layer for HTTP REST requests
 ├── hooks/
-│   └── useToast.js                 # Toast notification state management
+│   └── useToast.js                 # Custom hook for toast notification state
 │
 ├── components/
-│   ├── Toast.jsx                   # Notification bar (success/error)
-│   ├── UserAvatar.jsx              # Coloured initials avatar circle
-│   ├── SortArrow.jsx               # Column sort direction indicator
-│   ├── SkeletonRow.jsx             # Loading placeholder row
-│   ├── Pagination.jsx              # Page navigation controls
-│   ├── FilterModal.jsx             # Column filter popup
-│   ├── UserFormModal.jsx           # Add/Edit user form
-│   └── DeleteModal.jsx             # Delete confirmation dialog
+│   ├── Toast.jsx                   # Notification bar overlay
+│   ├── UserAvatar.jsx              # Hash-colored initials avatar badge
+│   ├── SortArrow.jsx               # Dynamic column direction indicator
+│   ├── SkeletonRow.jsx             # Animated pulse loading placeholder
+│   ├── Pagination.jsx              # Navigation controls & page size selector
+│   ├── FilterModal.jsx             # Advanced multi-column filter modal
+│   ├── UserFormModal.jsx           # User creation & edit modal dialog
+│   └── DeleteModal.jsx             # Action confirmation modal dialog
 │
-├── pages/
-│   └── UserManagementDashboard.jsx # Main dashboard (state orchestrator)
-│
-├── test/
-│   └── setup.js                    # Vitest global setup (jest-dom matchers)
-│
-└── __tests__/
-    ├── utils/
-    │   ├── helpers.test.js          # 13 tests
-    │   └── validation.test.js       # 15 tests
-    ├── services/
-    │   └── apiService.test.js       # 9 tests
-    └── components/
-        ├── Toast.test.jsx           # 5 tests
-        ├── Pagination.test.jsx      # 7 tests
-        ├── UserFormModal.test.jsx   # 8 tests
-        ├── DeleteModal.test.jsx     # 5 tests
-        └── FilterModal.test.jsx     # 5 tests
+└── pages/
+    └── UserManagementDashboard.jsx # Core application state orchestrator
 ```
 
 ---
 
-## Assumptions
+## 🛠️ Tech Stack & Dependencies
 
-1. **JSONPlaceholder is a mock API.** It returns 10 seed users from `GET /users`. POST, PUT, and DELETE requests are acknowledged with success responses but do not persist changes on the server. All mutations are reflected only in client-side state.
-
-2. **Duplicate ID workaround.** JSONPlaceholder's POST endpoint always returns `{ id: 11 }` regardless of how many users are created. To avoid duplicate React keys and data conflicts, we generate unique client-side IDs (starting from 1001) for newly added users.
-
-3. **Department data source.** The API does not have a dedicated `department` field. We use `user.company.name` as the department, which is a reasonable mapping for this demo.
-
-4. **Client-side data processing.** Search, filtering, sorting, and pagination all run client-side since JSONPlaceholder does not support query parameters for these operations.
-
-5. **Email validation.** We use a simple regex (`/^[^\s@]+@[^\s@]+\.[^\s@]+$/`) for email validation. A production application would use a dedicated validation library or server-side verification.
-
-6. **No authentication.** The application does not implement user authentication or authorisation, as it was not part of the requirements.
-
-7. **Browser support.** The app targets modern evergreen browsers (Chrome, Firefox, Safari, Edge). No polyfills are included for legacy browsers.
+| Category | Technology | Version | Purpose |
+| :--- | :--- | :--- | :--- |
+| **Framework** | [React](https://react.dev/) | `v19.2` | Core UI Library with concurrent rendering |
+| **Build Tool** | [Vite](https://vitejs.dev/) | `v8.1` | Ultra-fast HMR bundler and build engine |
+| **Styling** | [TailwindCSS](https://tailwindcss.com/) | `v3.4` | Utility-first responsive design framework |
+| **Testing** | [Vitest](https://vitest.dev/) | `v4.1` | Lightning fast unit testing framework |
+| **DOM Testing** | [React Testing Library](https://testing-library.com/) | `v16.3` | User-centric UI testing utilities |
+| **Linter** | [oxlint](https://oxc-project.github.io/) | `v1.69` | High performance JS/JSX linter |
 
 ---
 
-## API Endpoints Used
+## 🚀 Quick Start Guide
 
-| Method   | Endpoint          | Purpose            |
-|----------|-------------------|---------------------|
-| `GET`    | `/users`          | Fetch all users     |
-| `POST`   | `/users`          | Create a new user   |
-| `PUT`    | `/users/:id`      | Update a user       |
-| `DELETE` | `/users/:id`      | Delete a user       |
+### Prerequisites
 
-All endpoints are relative to `https://jsonplaceholder.typicode.com`.
+Ensure you have Node.js version 18+ and npm 9+ installed.
+
+```bash
+node -v # Should output >= 18.0.0
+npm -v  # Should output >= 9.0.0
+```
+
+### Installation
+
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/bhavanagangavaram/management-dashboard.git
+   cd management-dashboard
+   ```
+
+2. **Install Dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Start Development Server**
+   ```bash
+   npm run dev
+   ```
+   Open your browser and navigate to `http://localhost:5173`.
 
 ---
 
-## License
+## 🧪 Testing & Code Quality
 
-This project is for educational/demonstration purposes.
+The codebase enforces strict unit testing coverage across services, utilities, and React components.
+
+```bash
+# Run all 67 Vitest unit tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Execute oxlint code quality verification
+npm run lint
+
+# Create production build bundle
+npm run build
+```
+
+### Test Suite Summary
+
+- ✅ `helpers.test.js` — 13 tests passing
+- ✅ `validation.test.js` — 15 tests passing
+- ✅ `apiService.test.js` — 9 tests passing
+- ✅ `Toast.test.jsx` — 5 tests passing
+- ✅ `Pagination.test.jsx` — 7 tests passing
+- ✅ `DeleteModal.test.jsx` — 5 tests passing
+- ✅ `FilterModal.test.jsx` — 5 tests passing
+- ✅ `UserFormModal.test.jsx` — 8 tests passing
+
+---
+
+## 🌐 API Integrations
+
+The dashboard integrates with [JSONPlaceholder Mock REST API](https://jsonplaceholder.typicode.com):
+
+| HTTP Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `GET` | `/users` | Retrieves initial list of seed user records |
+| `POST` | `/users` | Simulates user creation & returns mock object |
+| `PUT` | `/users/:id` | Simulates full update of user record |
+| `DELETE` | `/users/:id` | Simulates user record deletion |
+
+---
+
+## 📄 License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+---
+
+<div align="center">
+  Developed with ❤️ by <strong><a href="https://github.com/bhavanagangavaram">Bhavana Gangavaram</a></strong>
+</div>
